@@ -3,7 +3,7 @@ English
 Developer: Alexey Surnov. e-mail: alslight@mail.ru
 -------------------------------------------------------------------------
 RAM-CPU-temp serves for real-time monitoring of parameters:
-- ÑPU temperature 
+- CPU temperature 
 - involved RAM
 - CPU load
 You can save the results in a separate file after taking measurements.
