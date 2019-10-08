@@ -1,26 +1,21 @@
 import psutil
 import os
 import time, csv
-import platform, cpuinfo, re
+import platform, re
 import subprocess
+from cpuinfo import get_cpu_info
+import multiprocessing
 import termcolor
 from datetime import datetime, timedelta
 
 def monitoring_go_eng():
-     print('------------------------------------------')
-     print('INFO_System:')
-     print('OS:'+' '+str(platform.platform()))
-     print('RAM total:' + ' ' + str((psutil.virtual_memory().total ) / (1024 * 1024 * 1024)) + ' ' + 'Gb')
-     print('Brand CPU:'+' '+str(cpuinfo.get_cpu_info()['brand']))
-     print('Count CPU:'+' '+str(psutil.cpu_count()))
-     print('------------------------------------------')
+
      data_monitoring=[['Time','Temperature CPU (С)','Load CPU (%)', 'Used RAM (Gb)']]
 
-
-     min=input('enter time measurement in minutes and press the button "Enter": ').replace(',', '.')
+     min = input('enter time measurement in minutes and press the button "Enter": ').replace(',', '.')
      start = datetime.now()
      file_date_time = str(time.strftime("%Y-%m-%d_%H-%M-%S"))
-     sys_data=['Measurement date:'+' '+file_date_time,'OS:'+' '+str(platform.platform()), 'Brand CPU:'+' '+str(cpuinfo.get_cpu_info()['brand']), 'Count CPU:'+' '+str(psutil.cpu_count()), 'RAM total:'+' '+str((psutil.virtual_memory().total) / (1024*1024*1024))+' ' + 'Gb','Measurement data']
+     sys_data=['Measurement date:'+' '+file_date_time,'OS:'+' '+str(platform.platform()), 'Brand CPU:'+' '+str(brand), 'Count CPU:'+' '+str(psutil.cpu_count()), 'RAM total:'+' '+str((psutil.virtual_memory().total) / (1024*1024*1024))+' ' + 'Gb','Measurement data']
 
 
      def type_corr(min=0): # input validation function, returns a Boolean value
@@ -47,6 +42,7 @@ def monitoring_go_eng():
          temperature_info = round(((temperature_info.CurrentTemperature / 10) - 273), 4) # the translation to Celsius
          cpu_proc1 = str(psutil.cpu_percent())  # load CPU
          cpu_proc2 = int(cpu_proc1[:cpu_proc1.find('.')]) # load CPU for progress-bar
+         termcolor.cprint('|' + 'PARAMETERS:', 'blue')
          termcolor.cprint('|'+'Temperature CPU= ' + str(temperature_info) + ' ' + 'C', 'red')  # the output of temperature into the terminal
          termcolor.cprint('|'+sym * round(temperature_info) + '|','red') #the output of progress-bar
          termcolor.cprint('|'+'Load CPU=' + str(cpu_proc1) + ' '+'%', 'green')  # the output of load CPU into the terminal
@@ -70,6 +66,7 @@ def monitoring_go_eng():
          temperature_info = float((sum(temperature_info)) / (len(psutil.sensors_temperatures()['coretemp']))) # arithmetic mean of temperature CPU
          cpu_proc1 = str(psutil.cpu_percent())  # load CPU
          cpu_proc2 = int(cpu_proc1[:cpu_proc1.find('.')]) # load CPU for progress-bar
+         termcolor.cprint('|' + 'PARAMETERS:', 'blue')
          termcolor.cprint('|'+'Temperature CPU=' + str(temperature_info) + ' ' + 'C', 'red')  # the output of temperature into the terminal
          termcolor.cprint('|'+sym * round(temperature_info) + '|' ,'red') #the output of progress-bar
          termcolor.cprint('|'+'Load CPU=' + str(cpu_proc1) + ' '+'%', 'green')  # the output of load CPU into the terminal
@@ -113,18 +110,12 @@ def monitoring_go_eng():
 
 
 def monitoring_go_rus():
-    print('------------------------------------------')
-    print('ИНФОРМАЦИЯ О СИСТЕМЕ:')
-    print('OC:' + ' ' + str(platform.platform()))
-    print('Доступная физическая оперативная память:' + ' ' + str((psutil.virtual_memory().total) / (1024 * 1024 * 1024)) + ' ' + 'Gb')
-    print('Марка ЦП:' + ' ' + str(cpuinfo.get_cpu_info()['brand']))
-    print('Количество ядер:' + ' ' + str(psutil.cpu_count()))
-    print('------------------------------------------')
+
     data_monitoring = [['Время', 'Температура ЦП (С)', 'Загрузка ЦП (%)', 'Использование ОЗУ (Гб)']]
     min = input('введите время выволения мониторинга в минутах и нажмите "Enter": ').replace(',', '.')
     start = datetime.now()
     file_date_time = str(time.strftime("%Y-%m-%d_%H-%M-%S"))
-    sys_data = ['Дата измеренеий:'+' '+str(time.strftime("%Y-%m-%d %H:%M:%S")), 'ОС:' + ' ' + str(platform.platform()),'Марка ЦП:' + ' ' + str(cpuinfo.get_cpu_info()['brand']), 'Количество ядер:' + ' ' + str(psutil.cpu_count()),'Доступная физическая оперативная память:' + ' ' + str((psutil.virtual_memory().total) / (1024 * 1024 * 1024)) + ' ' + 'Гб','Таблица  измерений:']
+    sys_data = ['Дата измеренеий:'+' '+str(time.strftime("%Y-%m-%d %H:%M:%S")), 'ОС:' + ' ' + str(platform.platform()),'Марка ЦП:' + ' '+str(brand), 'Количество ядер:' + ' ' + str(psutil.cpu_count()),'Доступная физическая оперативная память:' + ' ' + str((psutil.virtual_memory().total) / (1024 * 1024 * 1024)) + ' ' + 'Гб','Таблица  измерений:']
 
     def type_corr(min=0):  # фукнция проверки правильности ввода, возвращет логическое значение
         if re.search(r'^[-+]?[0-9]*[.,]?[0-9]+(?:[eE][-+]?[0-9]+)?$', min) is not None:
@@ -150,6 +141,7 @@ def monitoring_go_rus():
         temperature_info = round(((temperature_info.CurrentTemperature / 10) - 273), 4)  # перевод в градусы C
         cpu_proc1 = str(psutil.cpu_percent())  # загрузка ЦП для вывода
         cpu_proc2 = int(cpu_proc1[:cpu_proc1.find('.')])  # загрузка ЦП для умножения строки и показания прогресс бара
+        termcolor.cprint('|' + 'ПАРАМЕТРЫ:', 'blue')
         termcolor.cprint('|'+'температура ЦП=' + str(temperature_info) + ' ' + 'C','red')  # вывод температуры в терминал
         termcolor.cprint('|'+sym * round(temperature_info) + '|','red')
         termcolor.cprint('|'+'загрузка ЦП=' + str(cpu_proc1) + ' '+'%','green')  # вывод загрузки ЦП в терминал
@@ -173,6 +165,7 @@ def monitoring_go_rus():
         temperature_info = float((sum(temperature_info)) / (len(psutil.sensors_temperatures()['coretemp'])))  # подсчет среднего значения температуры
         cpu_proc1 = str(psutil.cpu_percent())  # загрузка ЦП для вывода
         cpu_proc2 = int(cpu_proc1[:cpu_proc1.find('.')])  # загрузка ЦП для умножения строки и показания прогресс бара
+        termcolor.cprint('|' + 'ПАРАМЕТРЫ:', 'blue')
         termcolor.cprint('|'+'температура ЦП=' + str(temperature_info) + ' ' + 'C','red')  # вывод температуры в терминал
         termcolor.cprint('|'+sym * round(temperature_info) + '|','red')
         termcolor.cprint('|'+'загрузка ЦП=' + str(cpu_proc1) +' '+'%','green')  # вывод загрузки ЦП в терминал
@@ -213,6 +206,13 @@ def monitoring_go_rus():
             break
         else: break
 
+
+multiprocessing.freeze_support()
+brand=get_cpu_info()
+brand=brand.get('brand')
+
+
+
 def select_your_language(): # a function for enter your language/функция ввода языкка
     language=input('enter your language/введите язык [rus/eng]: ').lower()
     print('------------------------------------------')
@@ -222,34 +222,53 @@ lang=select_your_language()
 
 
 def soft_info_rus():
+    print('------------------------------------------')
+    print('ПРОГРАММА ДОЛЖНА БЫТЬ ЗАПУЩЕННА ОТ ИМЕНИ АДМИНИСТРАТОРА')
+    print('ИНАЧЕ ВОЗНИКНЕТ ОШИБКА И ПРИЛОЖЕНИЕ НЕ СМОЖЕТ РАБОТАТЬ')
+    print('------------------------------------------')
     rus_info=['Разработчик: Алексей Сурнов', 'RAM-CPU-temp служит для контроля в реальном времени за параметрами:', '--температуры процессора'
               , '--задействованной оперативной памяти', '--загрузки процессора',
               'Вы можете сохранить результаты в отдельный файл после выполнения измерений.',
               'Файл с данными в формате csv будет находится в той же папке что и программа',
-              'Использовать в операционных системаx: ', '--Windows v.7,8,10 ', '--Linux Debian, Linux Mint, Linux Ubuntu.']
+              'Использовать в операционных системаx: ', '--Windows v.7,8,10 ', '--Linux Debian, Linux Ubuntu.']
     for info in rus_info:
         print(info)
+    print('------------------------------------------')
+    print('ИНФОРМАЦИЯ О СИСТЕМЕ:')
+    print('OC:' + ' ' + str(platform.platform()))
+    print('Доступная физическая оперативная память:' + ' ' + str((psutil.virtual_memory().total) / (1024 * 1024 * 1024)) + ' ' + 'Gb')
+    print('Марка ЦП:' + ' '+str(brand))
+    print('Количество ядер:' + ' ' + str(psutil.cpu_count()))
     print('------------------------------------------')
 
 
 
 def soft_info_eng():
+    print('------------------------------------------')
+    print('THE PROGRAM MUST BE RUN AS ADMINISTRATOR')
+    print('OTHERWISE AN ERROR WILL OCCUR AND THE APPLICATION WILL NOT BE ABLE TO WORK')
+    print('------------------------------------------')
     eng_info=['Developer: Alexey Surnov', 'RAM-CPU-temp serves for real-time monitoring of parameters:', '--СPU temperature'
               , '--involved RAM', '--CPU load',
               'You can save the results in a separate file after taking measurements.',
               'The data file in csv format will be located in the same folder as the program',
-              'Use in operating systems: ', '--Windows v.7,8,10 ', '--Linux Debian, Linux Mint, Linux Ubuntu.']
+              'Use in operating systems: ', '--Windows v.7,8,10 ', '--Linux Debian, Linux Ubuntu.']
     for info in eng_info:
         print(info)
     print('------------------------------------------')
+    print('INFO_System:')
+    print('OS:' + ' ' + str(platform.platform()))
+    print('RAM total:' + ' ' + str((psutil.virtual_memory().total) / (1024 * 1024 * 1024)) + ' ' + 'Gb')
+    print('Brand CPU:' + ' '+str(brand))
+    print('Count CPU:' + ' ' + str(psutil.cpu_count()))
+    print('------------------------------------------')
 
 
-if lang=='rus': soft_info_rus()
-elif lang=='eng': soft_info_eng()
 sym = '▌'  # символ прогресс бара/a symbol of the progress bar
 
 while True:
     if lang=='rus':
+        soft_info_rus()
         flag = input('Начать выполнение мониторинга [да/нет]: ')
         if flag == 'да': monitoring_go_rus()
         elif flag=='нет':
@@ -259,6 +278,7 @@ while True:
             print('неправильный ввод'+' '+'вы ввели:'+ ' '+'|'+flag+'|'+' '+ 'повторите попытку')
             print('введите [да/нет]')
     elif lang=='eng':
+        soft_info_eng()
         flag = input('Do you want to start monitoring [yes/no]: ')
         if flag == 'yes': monitoring_go_eng()
         elif flag=='no':
