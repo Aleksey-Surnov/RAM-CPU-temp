@@ -10,7 +10,7 @@ You can save the results in a separate file after taking measurements.
 The data file in csv format will be located in the same folder as the program
 Use in operating systems: 
 -Windows v.7,8,10 
--Linux Debian, Linux Mint, Linux Ubuntu.
+-Linux Debian, Linux Ubuntu.
 -------------------------------------------------------------------------
 Instructions:
 THE PROGRAM MUST BE RUN AS ADMINISTRATOR!!!
@@ -50,7 +50,7 @@ RAM-CPU-temp служит для контроля в реальном време
 Файл с данными в формате csv будет находится в той же папке что и программа
 Использовать в операционных системаx: 
 -Windows v.7,8,10 
--Linux Debian, Linux Mint, Linux Ubuntu.
+-Linux Debian, Linux Ubuntu.
 ------------------------------------------------------------------------
 Инструкция:
 ПРОГРАММА ДОЛЖНА БЫТЬ ЗАПУЩЕННА ОТ ИМЕНИ АДМИНИСТРАТОРА!!!
