@@ -13,6 +13,7 @@ Use in operating systems:
 -Linux Debian, Linux Mint, Linux Ubuntu.
 -------------------------------------------------------------------------
 Instructions:
+THE PROGRAM MUST BE RUN AS ADMINISTRATOR!!!
 Open file “read me”  and read the instruction
 Run the application
 Enter the language [Russian/English]
@@ -52,6 +53,7 @@ RAM-CPU-temp служит для контроля в реальном време
 -Linux Debian, Linux Mint, Linux Ubuntu.
 ------------------------------------------------------------------------
 Инструкция:
+ПРОГРАММА ДОЛЖНА БЫТЬ ЗАПУЩЕННА ОТ ИМЕНИ АДМИНИСТРАТОРА!!!
 Откройте файл read me  и прочитайте инструкцию
 Запустите приложение
 Выберете язык [Russian/England]
