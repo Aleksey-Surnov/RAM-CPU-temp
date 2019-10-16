@@ -1,6 +1,7 @@
 English
 -------------------------------------------------------------------------
 Developer: Alexey Surnov. e-mail: alslight@mail.ru
+I study programming language python creating these examples
 -------------------------------------------------------------------------
 RAM-CPU-temp serves for real-time monitoring of parameters:
 - CPU temperature 
@@ -41,6 +42,7 @@ To exit the program press the button «Enter»
 Russia 
 ------------------------------------------------------------------------
 Разработчик: Алексей Сурнов. e-mail: alslight@mail.ru
+Изучаю язык програмирования python делая такие примеры.
 ------------------------------------------------------------------------
 RAM-CPU-temp служит для контроля в реальном времени за параметрами:
 -температуры процессора
